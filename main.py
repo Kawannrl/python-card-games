@@ -12,7 +12,6 @@ class Jogador:
     def jogar_dados (self):
         
         while True:
-            limpar_tela()
             valor_dado1 = random.randint (1, 6)
             valor_dado2 = random.randint (1, 6)
 
@@ -29,6 +28,7 @@ class Jogador:
                 print("Empate! Jogando os dados novamente...\n")
 
 if __name__ == "__main__":
+    limpar_tela ()
     nome1 = input ("Informe o nome do Primeiro Jogador: ")
     nome2 = input ("Informe o nome do Segundo Jogador: ")
 
