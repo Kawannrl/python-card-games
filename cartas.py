@@ -18,7 +18,7 @@ class Carta:
         pass
     
 class Carta_aumento (Carta):
-    def __init__ (self,  nome, energia_gasta: int, descricao, tipo_aumento: Tipo_Aumento, pontos_aumentados: int):
+    def __init__ (self, nome, energia_gasta: int, descricao, tipo_aumento: Tipo_Aumento, pontos_aumentados: int):
         super ().__init__ (nome, energia_gasta, descricao)
         self.tipo_aumento = tipo_aumento
         self.pontos_aumentados = pontos_aumentados
