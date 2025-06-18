@@ -64,7 +64,7 @@ class Carta_dano (Carta):
         super ().__init__ (nome, energia_gasta, descricao)
         self.dano_causado = dano_causado
         
-    def usar_carta (self, atacante: Personagem, atacado: Personagem):
+    def usar_carta (self, atacado: Personagem, atacante: Personagem):
         atacado.pontos_vida_atual -= self.dano_causado
         return (f"O {atacante} causou {self.dano_causado} de dano ao {atacado}")
     

@@ -1,4 +1,3 @@
-import random
 import os
 from personagem import Personagem
 from partida import Partida
@@ -12,7 +11,7 @@ if __name__ == "__main__":
     nome1 = input ("Informe o nome do Primeiro Jogador: ")
     nome2 = input ("Informe o nome do Segundo Jogador: ")
     
-    nome  = ("Mago Sombrio")
+    nome = ("Mago Sombrio")
     pontos_vida_max = 200
     pontos_vida_atual = 100
     pontos_ataque = 20
@@ -22,7 +21,7 @@ if __name__ == "__main__":
     
     personegem1 = Personagem (nome1, pontos_vida_max, pontos_vida_atual, pontos_ataque, pontos_defesa, mao_cartas, energia)
     
-    nome  = ("Mago da Luz")
+    nome = ("Mago da Luz")
     pontos_vida_max = 200
     pontos_vida_atual = 100
     pontos_ataque = 20

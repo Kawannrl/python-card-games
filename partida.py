@@ -18,10 +18,10 @@ class Partida:
     def iniciar_jogo (self):
         self.jogador_atual = self.jogar_dados ()
         self.criar_baralho_cartas ()
-        sorteio_cartas_iniciais = random.choices (self.baralho_cartas, k = 5)
-        self.jogador1.mao_cartas.append (sorteio_cartas_iniciais)
-        self.jogador2.mao_cartas.append (sorteio_cartas_iniciais)
-        print (self.jogador1.mao_cartas)
+        sorteio_cartas_iniciais = random.choices (self.baralho_cartas, k = 4)
+        self.jogador1.mao_cartas.extend (sorteio_cartas_iniciais)
+        self.jogador2.mao_cartas.extend (sorteio_cartas_iniciais)
+        self.acao_jogador ()
     
     def jogar_dados (self):
         
@@ -33,28 +33,31 @@ class Partida:
             print (f"{self.jogador2.nome} tirou {valor_dado2}")
 
             if valor_dado1 > valor_dado2:
-                print (f"{self.jogador1} é o primeiro a jogar!")
+                print (f"\n{self.jogador1.nome} é o primeiro a jogar!")
                 jogador_atual = self.jogador1
+                self.jogador_inimigo = self.jogador2
                 return jogador_atual
             elif valor_dado2 > valor_dado1:
-                print (f"{self.jogador2} é o primeiro a jogar!")
+                print (f"\n{self.jogador2.nome} é o primeiro a jogar!")
                 jogador_atual = self.jogador2
+                self.jogador_inimigo = self.jogador1
                 return jogador_atual
             else:
-                print("Empate! Jogando os dados novamente...\n")
+                print("\nEmpate! Jogando os dados novamente...\n")
                 
     def acao_jogador (self):
-        escolha_jogador = input (f"Escolha umas das opções: \n1 - Usar Carta \n2 - Atacar \n3 - Comprar Carta")
-        match escolha_jogador:
-            case 1:
-                Personagem.usar_carta ()
-            case 2:
-                Personagem.atacar ()
-            case 3:
-                Personagem.comprar_carta ()  
+        escolha_jogador = int(input (f"\nEscolha umas das opções: \n1 - Usar Carta \n2 - Atacar \n3 - Comprar Carta \nOpção: "))
+        if self.jogador_atual != self.jogador_inimigo:
+            match escolha_jogador:
+                case 1:
+                    self.jogador_atual.usar_carta (self.jogador_inimigo, self.jogador_atual)
+                case 2:
+                    Personagem.atacar ()
+                case 3:
+                    Personagem.comprar_carta ()  
                 
     
-    def trocar_turno (self, ):
+    def trocar_turno (self):
         pass
     
     def trocar_jogador (self):
@@ -92,27 +95,29 @@ class Partida:
         energia_gasta = 25
         descricao = ("sla")
         
+        carta_roubo = cartas.Carta_roubo (nome, energia_gasta, descricao)
+        
         nome = ("casca de banana")
         energia_gasta = 30
         descricao = ("sla")
+        
+        carta_atordoamento = cartas.Carta_atordoamento (nome, energia_gasta, descricao)
         
         nome = ("super carta de dano")
         energia_gasta = 10
         descricao = ("sla")
         dano_causado = 15
         
+        carta_dano = cartas.Carta_dano (nome, energia_gasta, descricao, dano_causado)
+        
         nome = ("super carta de cura")
         energia_gasta = 20
         descricao = ("sla")
         vida_curada = 15
         
-        carta_roubo = cartas.Carta_roubo (nome, energia_gasta, descricao)
-        carta_atordoamento = cartas.Carta_atordoamento (nome, energia_gasta, descricao)
-        carta_cura = cartas.Carta_dano (nome, energia_gasta, descricao, vida_curada)
-        carta_dano = cartas.Carta_cura (nome, energia_gasta, descricao, dano_causado)
+        carta_cura = cartas.Carta_cura (nome, energia_gasta, descricao, vida_curada)
         
         self.baralho_cartas.append (carta_roubo)
         self.baralho_cartas.append (carta_atordoamento)
-        self.baralho_cartas.append (carta_cura)
         self.baralho_cartas.append (carta_dano)
-        
+        self.baralho_cartas.append (carta_cura)
