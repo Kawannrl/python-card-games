@@ -15,9 +15,9 @@ if __name__ == "__main__":
     pontos_vida_max = 200
     pontos_vida_atual = 100
     pontos_ataque = 20
-    pontos_defesa = 40
+    pontos_defesa = 50
     mao_cartas = []
-    energia = 10
+    energia = 100
     
     personegem1 = Personagem (nome1, pontos_vida_max, pontos_vida_atual, pontos_ataque, pontos_defesa, mao_cartas, energia)
     
@@ -25,9 +25,9 @@ if __name__ == "__main__":
     pontos_vida_max = 200
     pontos_vida_atual = 100
     pontos_ataque = 20
-    pontos_defesa = 40
+    pontos_defesa = 50
     mao_cartas = []
-    energia = 10
+    energia = 100
     
     personegem2 = Personagem (nome2, pontos_vida_max, pontos_vida_atual, pontos_ataque, pontos_defesa, mao_cartas, energia)
     

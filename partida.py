@@ -20,8 +20,18 @@ class Partida:
         self.criar_baralho_cartas ()
         sorteio_cartas_iniciais = random.choices (self.baralho_cartas, k = 4)
         self.jogador1.mao_cartas.extend (sorteio_cartas_iniciais)
+        sorteio_cartas_iniciais = random.choices (self.baralho_cartas, k = 4)
         self.jogador2.mao_cartas.extend (sorteio_cartas_iniciais)
-        self.acao_jogador ()
+        self.desenvolver_jogo ()
+        
+    def desenvolver_jogo (self):
+        while (self.jogador_inimigo.pontos_vida_atual > 0):
+            self.jogador_atual.mostrar_informacoes ()
+            self.jogador_inimigo.mostrar_informacoes ()
+            self.acao_jogador ()
+            self.trocar_turno ()
+            self.trocar_jogador ()
+        self.acabar_jogo ()
     
     def jogar_dados (self):
         
@@ -46,25 +56,29 @@ class Partida:
                 print("\nEmpate! Jogando os dados novamente...\n")
                 
     def acao_jogador (self):
-        escolha_jogador = int(input (f"\nEscolha umas das opções: \n1 - Usar Carta \n2 - Atacar \n3 - Comprar Carta \nOpção: "))
+        escolha_jogador = int(input (f"\n{self.jogador_atual.nome} escolha umas das opções: \n1 - Usar Carta \n2 - Atacar \nOpção: "))
         if self.jogador_atual != self.jogador_inimigo:
             match escolha_jogador:
                 case 1:
                     self.jogador_atual.usar_carta (self.jogador_inimigo, self.jogador_atual)
                 case 2:
-                    Personagem.atacar ()
-                case 3:
-                    Personagem.comprar_carta ()  
-                
+                    self.jogador_atual.atacar (self.jogador_inimigo, self.jogador_atual)
     
     def trocar_turno (self):
-        pass
+        self.turno_jogo += 1
+        print (f"\n|||     {self.turno_jogo}° Turno     |||\n")
     
     def trocar_jogador (self):
-        pass
+        self.trocas = self.jogador_atual
+        self.jogador_atual = self.jogador_inimigo
+        self.jogador_inimigo = self.trocas
+        self.jogador_atual.comprar_carta (self.baralho_cartas)
     
     def acabar_jogo (self):
-        pass
+        if self.jogador1.pontos_vida_atual == 0:
+            return (f"\n|||||   PARABÉNS   |||||\n{self.jogador1.nome} venceu o jogo!")
+        else:
+            return (f"\n|||||   PARABÉNS   |||||\n{self.jogador2.nome} venceu o jogo!")
     
     def criar_baralho_cartas (self):
         # nome = ("carta aumento vida máxima")
