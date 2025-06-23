@@ -25,13 +25,13 @@ class Partida:
         self.desenvolver_jogo ()
         
     def desenvolver_jogo (self):
-        while (self.jogador_inimigo.pontos_vida_atual > 0):
+        while (self.jogador1.pontos_vida_atual > 0 and self.jogador2.pontos_vida_atual > 0):
             self.jogador_atual.mostrar_informacoes ()
             self.jogador_inimigo.mostrar_informacoes ()
             self.acao_jogador ()
             self.trocar_turno ()
             self.trocar_jogador ()
-        self.acabar_jogo ()
+        print (self.acabar_jogo ())
     
     def jogar_dados (self):
         
@@ -75,10 +75,10 @@ class Partida:
         self.jogador_atual.comprar_carta (self.baralho_cartas)
     
     def acabar_jogo (self):
-        if self.jogador1.pontos_vida_atual == 0:
-            return (f"\n|||||   PARABÉNS   |||||\n{self.jogador1.nome} venceu o jogo!")
-        else:
+        if self.jogador1.pontos_vida_atual <= 0:
             return (f"\n|||||   PARABÉNS   |||||\n{self.jogador2.nome} venceu o jogo!")
+        else:
+            return (f"\n|||||   PARABÉNS   |||||\n{self.jogador1.nome} venceu o jogo!")
     
     def criar_baralho_cartas (self):
         # nome = ("carta aumento vida máxima")

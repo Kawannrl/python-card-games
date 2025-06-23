@@ -15,8 +15,8 @@ class Personagem:
         self.mao_cartas = mao_cartas
         self.energia = energia
         
-    def atacar (self, jogador_inimigo, jogador_atual):
-        pass
+    def atacar (self, jogador_inimigo, jogador_atual = None):
+        jogador_inimigo.pontos_vida_atual -= jogador_atual.pontos_ataque
     
     def usar_carta (self, prejudicado = None, beneficiado = None):
         from cartas import Carta_roubo
