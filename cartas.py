@@ -45,7 +45,7 @@ class Carta_roubo (Carta):
     def __init__ (self, nome, energia_gasta: int, descricao):
         super ().__init__ (nome, energia_gasta, descricao)
         
-    def usar_carta (self, ladrao: Personagem, vitima: Personagem):
+    def usar_carta (self,  vitima: Personagem, ladrao: Personagem):
         sorteio_carta_roubada = random.randint (0, len (vitima.mao_cartas) - 1)
         carta_roubada = vitima.mao_cartas.pop (sorteio_carta_roubada)
         ladrao.mao_cartas.append (carta_roubada)

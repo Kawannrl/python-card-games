@@ -6,55 +6,71 @@ def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')      
 
 class Personagem:
-    def __init__(self, nome, pontos_vida_max, pontos_vida_atual, pontos_ataque, pontos_defesa, mao_cartas, energia):
+    def __init__(self, nome, pontos_vida_max, pontos_vida_atual, pontos_ataque, pontos_defesa, pontos_defesa_max, mao_cartas, energia_atual, energia_max):
         self.nome = nome
         self.pontos_vida_max = pontos_vida_max
         self.pontos_vida_atual = pontos_vida_atual
         self.pontos_ataque = pontos_ataque
         self.pontos_defesa = pontos_defesa
+        self.pontos_defesa_max = pontos_defesa_max
         self.mao_cartas = mao_cartas
-        self.energia = energia
+        self.energia_atual = energia_atual
+        self.energia_max = energia_max
         
-    def atacar (self, jogador_inimigo, jogador_atual = None):
-        jogador_inimigo.pontos_vida_atual -= jogador_atual.pontos_ataque
+    def atacar (self, jogador_inimigo = None, jogador_atual = None):
+        if jogador_inimigo.pontos_defesa <= 0:
+            jogador_inimigo.pontos_vida_atual -= jogador_atual.pontos_ataque
+        else:
+            jogador_inimigo.pontos_defesa = max (0, jogador_inimigo.pontos_defesa - jogador_atual.pontos_ataque)
+            if jogador_inimigo.pontos_defesa <= 0:
+                jogador_inimigo.pontos_vida_atual -= jogador_atual.pontos_ataque
+        return (f"O {jogador_atual.nome} causou {jogador_atual.pontos_ataque} de dano à {jogador_inimigo.nome}")
     
     def usar_carta (self, prejudicado = None, beneficiado = None):
         from cartas import Carta_roubo
         from cartas import Carta_atordoamento
         from cartas import Carta_dano
         from cartas import Carta_cura
+        from cartas import Carta_aumento
         limpar_tela ()
         print ("\n||      Mão de Cartas     ||\n")
-        for i, cartas in enumerate (self.mao_cartas):
-            print (f"Carta {i+1}: {cartas.nome}")     
-        numero_carta_escolhida = int (input ("\nQual carta você quer usar?\n"))
-        carta_escolhida = self.mao_cartas [numero_carta_escolhida - 1]
-        if isinstance (carta_escolhida, Carta_roubo):
-            carta_escolhida.usar_carta (prejudicado, beneficiado)
-            print ("Carta de roubo usada")
-        elif isinstance (carta_escolhida, Carta_atordoamento):
-            carta_escolhida.usar_carta (prejudicado)
-            print ("Carta de atordoamento usada")
-        elif isinstance (carta_escolhida, Carta_dano):
-            carta_escolhida.usar_carta (prejudicado, beneficiado)
-            print ("Carta de dano usada")
-        elif isinstance (carta_escolhida, Carta_cura):
-            carta_escolhida.usar_carta (beneficiado)
-            print ("Carta de cura usada")
+        if self.energia_atual > 0:
+            for i, cartas in enumerate (self.mao_cartas):
+                print (f"Carta {i+1}: {cartas.nome}")     
+            numero_carta_escolhida = int (input ("\nQual carta você quer usar?\n"))
+            carta_escolhida = self.mao_cartas.pop (numero_carta_escolhida - 1)
+            if isinstance (carta_escolhida, Carta_roubo):
+                carta_escolhida.usar_carta (prejudicado, beneficiado)
+                return ("Carta de roubo usada")
+            elif isinstance (carta_escolhida, Carta_atordoamento):
+                carta_escolhida.usar_carta (prejudicado)
+                return ("Carta de atordoamento usada")
+            elif isinstance (carta_escolhida, Carta_dano):
+                carta_escolhida.usar_carta (prejudicado, beneficiado)
+                return ("Carta de dano usada")
+            elif isinstance (carta_escolhida, Carta_cura):
+                carta_escolhida.usar_carta (beneficiado)
+                return ("Carta de cura usada")
+            elif isinstance (carta_escolhida, Carta_aumento):
+                carta_escolhida.usar_carta (beneficiado)
+                return ("Carta de aumento usada")
+            else:
+                return (f"Você não tem energia suficiente para usar a carta")
+        else:
+            print ("Voce não tem mais energia para mais nenhuma ação")
+            return True
             
     def comprar_carta (self, baralho_cartas):
         carta_comprada = random.sample (baralho_cartas, k = 1)
         self.mao_cartas.extend (carta_comprada)
         return (f"{self.nome} comprou a carta {carta_comprada}")
-    
-    def levar_dano (self):
-        pass
-    
-    def listar_mao_cartas (self):
-        print (self.mao_cartas)
         
     def mostrar_informacoes (self):
-        print (f"\n{self.nome}\nVida: {self.pontos_vida_atual}\nAtaque: {self.pontos_ataque}\nDefesa: {self.pontos_defesa}\nEnergia: {self.energia}")
+        print (f"     \n{self.nome}     ")
+        print (f"     Vida: {self.pontos_vida_atual}/{self.pontos_vida_max}")
+        print (f"     Ataque: {self.pontos_ataque}")
+        print (f"     Defesa: {self.pontos_defesa}/{self.pontos_defesa_max}")
+        print (f"     Energia: {self.energia_atual}/{self.energia_max}")
     
     def curar (self):
         pass
