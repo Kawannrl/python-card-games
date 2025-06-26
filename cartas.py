@@ -27,18 +27,22 @@ class Carta_aumento (Carta):
         match self.tipo_aumento:
             case Tipo_Aumento.aumento_vida_max:
                 beneficiado.pontos_vida_max += self.pontos_aumentados
+                beneficiado.energia_atual -= self.energia_gasta
                 return (f"O {beneficiado} usou uma carta de Aumento de Vida Máxima")
             
             case Tipo_Aumento.aumento_energia_max:
                 beneficiado.energia += self.pontos_aumentados
+                beneficiado.energia_atual -= self.energia_gasta
                 return (f"O {beneficiado} usou uma carta de Aumento de Energia Máxima")
                 
             case Tipo_Aumento.aumento_defesa:
                 beneficiado.pontos_defesa += self.pontos_aumentados
+                beneficiado.energia_atual -= self.energia_gasta
                 return (f"O {beneficiado} usou uma carta de Aumento de Defesa")
                 
             case Tipo_Aumento.aumento_ataque:
                 beneficiado.pontos_ataque += self.pontos_aumentados
+                beneficiado.energia_atual -= self.energia_gasta
                 return (f"O {beneficiado} usou uma carta de Aumento de Ataque")
                 
 class Carta_roubo (Carta):
@@ -49,14 +53,16 @@ class Carta_roubo (Carta):
         sorteio_carta_roubada = random.randint (0, len (vitima.mao_cartas) - 1)
         carta_roubada = vitima.mao_cartas.pop (sorteio_carta_roubada)
         ladrao.mao_cartas.append (carta_roubada)
+        ladrao.energia_atual -= self.energia_gasta
         return (f"O {ladrao} roubou a carta {carta_roubada} do {vitima}")
     
 class Carta_atordoamento (Carta):
     def __init__ (self, nome, energia_gasta: int, descricao):
         super ().__init__ (nome, energia_gasta, descricao)
         
-    def usar_carta (self, prejudicado: Personagem):
-        prejudicado.energia = 0
+    def usar_carta (self, beneficiado: Personagem, prejudicado: Personagem):
+        prejudicado.energia_atual = 0
+        beneficiado.energia_atual -= self.energia_gasta
         return (f"O {prejudicado} foi atordoado")
     
 class Carta_dano (Carta):
@@ -66,6 +72,7 @@ class Carta_dano (Carta):
         
     def usar_carta (self, atacado: Personagem, atacante: Personagem):
         atacado.pontos_vida_atual -= self.dano_causado
+        atacante.energia_atual -= self.energia_gasta
         return (f"O {atacante} causou {self.dano_causado} de dano ao {atacado}")
     
 class Carta_cura (Carta):
@@ -75,4 +82,5 @@ class Carta_cura (Carta):
         
     def usar_carta (self, beneficiado: Personagem):
         beneficiado.pontos_vida_atual += self.vida_curada
+        beneficiado.energia_atual -= self.energia_gasta
         return (f"O {beneficiado} curou {self.vida_curada} de vida") 

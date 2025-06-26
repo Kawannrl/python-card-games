@@ -17,13 +17,23 @@ class Personagem:
         self.energia_atual = energia_atual
         self.energia_max = energia_max
         
-    def atacar (self, jogador_inimigo = None, jogador_atual = None):
-        if jogador_inimigo.pontos_defesa <= 0:
+    def atacar (self, jogador_inimigo, jogador_atual):
+        
+        if jogador_inimigo.pontos_defesa == 0:
             jogador_inimigo.pontos_vida_atual -= jogador_atual.pontos_ataque
+        elif jogador_inimigo.pontos_defesa < jogador_atual.pontos_ataque:
+            dano = jogador_atual.pontos_ataque - jogador_inimigo.pontos_defesa
+            jogador_inimigo.pontos_defesa = 0
+            jogador_inimigo.pontos_vida_atual -= dano
         else:
-            jogador_inimigo.pontos_defesa = max (0, jogador_inimigo.pontos_defesa - jogador_atual.pontos_ataque)
-            if jogador_inimigo.pontos_defesa <= 0:
-                jogador_inimigo.pontos_vida_atual -= jogador_atual.pontos_ataque
+            jogador_inimigo.pontos_defesa -= jogador_atual.pontos_ataque
+        # if jogador_inimigo.pontos_defesa <= 0:
+        #     jogador_inimigo.pontos_vida_atual -= jogador_atual.pontos_ataque
+        # else:
+        #     jogador_inimigo.pontos_defesa = max (0, jogador_inimigo.pontos_defesa - jogador_atual.pontos_ataque)
+        #     if jogador_inimigo.pontos_defesa < 0:
+        #         jogador_inimigo.pontos_vida_atual -= jogador_atual.pontos_ataque
+        jogador_atual.pontos_energia_atual = max (0, jogador_atual.pontos_energia_atual - 25)
         return (f"O {jogador_atual.nome} causou {jogador_atual.pontos_ataque} de dano à {jogador_inimigo.nome}")
     
     def usar_carta (self, prejudicado = None, beneficiado = None):
@@ -34,7 +44,7 @@ class Personagem:
         from cartas import Carta_aumento
         limpar_tela ()
         print ("\n||      Mão de Cartas     ||\n")
-        if self.energia_atual > 0:
+        if self.energia_atual >= 0:
             for i, cartas in enumerate (self.mao_cartas):
                 print (f"Carta {i+1}: {cartas.nome}")     
             numero_carta_escolhida = int (input ("\nQual carta você quer usar?\n"))
@@ -43,7 +53,7 @@ class Personagem:
                 carta_escolhida.usar_carta (prejudicado, beneficiado)
                 return ("Carta de roubo usada")
             elif isinstance (carta_escolhida, Carta_atordoamento):
-                carta_escolhida.usar_carta (prejudicado)
+                carta_escolhida.usar_carta (beneficiado, prejudicado)
                 return ("Carta de atordoamento usada")
             elif isinstance (carta_escolhida, Carta_dano):
                 carta_escolhida.usar_carta (prejudicado, beneficiado)
@@ -58,7 +68,7 @@ class Personagem:
                 return (f"Você não tem energia suficiente para usar a carta")
         else:
             print ("Voce não tem mais energia para mais nenhuma ação")
-            return True
+            return
             
     def comprar_carta (self, baralho_cartas):
         carta_comprada = random.sample (baralho_cartas, k = 1)
@@ -71,6 +81,3 @@ class Personagem:
         print (f"     Ataque: {self.pontos_ataque}")
         print (f"     Defesa: {self.pontos_defesa}/{self.pontos_defesa_max}")
         print (f"     Energia: {self.energia_atual}/{self.energia_max}")
-    
-    def curar (self):
-        pass

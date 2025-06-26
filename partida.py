@@ -25,12 +25,10 @@ class Partida:
         
         while (self.jogador1.pontos_vida_atual > 0 and self.jogador2.pontos_vida_atual > 0):
             while self.jogador_atual.energia_atual > 0:
-                self.acao_jogador ()
+                if self.acao_jogador () == False:
+                    break
                 self.jogador_atual.mostrar_informacoes ()
-                #self.mostrar_mao ()
                 self.jogador_inimigo.mostrar_informacoes ()
-                #self.mostrar_mao ()
-            
             self.trocar_turno ()
             self.trocar_jogador ()
         print (self.acabar_jogo ())
@@ -63,17 +61,19 @@ class Partida:
             match escolha_jogador:
                 case 1:
                     self.jogador_atual.usar_carta (self.jogador_inimigo, self.jogador_atual)
+                    return True
                 case 2:
                     mensagem = self.jogador_atual.atacar (self.jogador_inimigo, self.jogador_atual)
                     print (mensagem)
-                case 3:
                     return True
-    
-    def verificar_energia (self):
-        pass
+                case 3:
+                    print (f"Turno Encerrado! Vez de {self.jogador_inimigo.nome}")
+                    return False
     
     def trocar_turno (self):
         self.turno_jogo += 1
+        self.jogador1.energia_atual += 25
+        self.jogador2.energia_atual += 25
         print (f"\n|||     {self.turno_jogo + 1}° Turno     |||\n")
     
     def trocar_jogador (self):
@@ -93,52 +93,52 @@ class Partida:
             print (f"||     {carta.nome}      ||")
     
     def criar_baralho_cartas (self):
-        nome = ("carta aumento vida máxima")
+        nome = ("carta aumento vida máxima (Custo 30)")
         energia_gasta = 30
         descricao = ("sla")
         tipo_aumento = cartas.Tipo_Aumento.aumento_vida_max
         pontos_aumentado = 40
         
-        nome = ("carta aumento energia máxima")
+        nome = ("carta aumento energia máxima (Custo 20)")
         energia_gasta = 20
         descricao = ("sla")
         tipo_aumento = cartas.Tipo_Aumento.aumento_energia_max
         pontos_aumentado = 20
         
-        nome = ("carta aumento defesa")
+        nome = ("carta aumento defesa (Custo 20)")
         energia_gasta = 20
         descricao = ("sla")
         tipo_aumento = cartas.Tipo_Aumento.aumento_defesa
         pontos_aumentado = 30
         
-        nome = ("carta aumento ataque")
-        energia_gasta = 25
+        nome = ("carta aumento ataque (Custo 40)")
+        energia_gasta = 40
         descricao = ("sla")
         tipo_aumento = cartas.Tipo_Aumento.aumento_ataque
         pontos_aumentado = 15
         
         carta_aumento = cartas.Carta_aumento (nome, energia_gasta, descricao, tipo_aumento, pontos_aumentado) 
         
-        nome = ("dois caras numa moto")
+        nome = ("dois caras numa moto (Custo 35)")
         energia_gasta = 35
         descricao = ("sla")
         
         carta_roubo = cartas.Carta_roubo (nome, energia_gasta, descricao)
         
-        nome = ("casca de banana")
+        nome = ("casca de banana (Custo 80)")
         energia_gasta = 80
         descricao = ("sla")
         
         carta_atordoamento = cartas.Carta_atordoamento (nome, energia_gasta, descricao)
         
-        nome = ("super carta de dano")
+        nome = ("super carta de dano (Custo 40)")
         energia_gasta = 40
         descricao = ("sla")
         dano_causado = 15
         
         carta_dano = cartas.Carta_dano (nome, energia_gasta, descricao, dano_causado)
         
-        nome = ("super carta de cura")
+        nome = ("super carta de cura (Custo 25)")
         energia_gasta = 25
         descricao = ("sla")
         vida_curada = 35
